@@ -7,3 +7,14 @@ export interface IUser {
 }
 
 export type UserModel = Document & IUser;
+
+export type TaskStatus = "pending" | "done"
+
+export interface ITask {
+    name: string;
+    description: string;
+    date_time: Date,
+    status: TaskStatus
+}
+
+export type TaskModel = Document & ITask;

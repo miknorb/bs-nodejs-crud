@@ -4,9 +4,10 @@ import UserAlreadyExistsError from "../errors/user-already-exists-error";
 import {IUser} from "../types";
 import UserNotFoundError from "../errors/user-not-found-error";
 import {Types} from "mongoose";
-import InvalidIdError from "../errors/invalid-id-error";
+import InvalidUserIdError from "../errors/invalid-user-id-error";
 const {ObjectId} = Types;
-export async function createUser(createUserRequest: Partial<IUser>) {
+
+export async function createUser(createUserRequest: IUser) {
     const missingProperties = [];
     if (!createUserRequest.username) {
         missingProperties.push("username");
@@ -34,7 +35,7 @@ export async function createUser(createUserRequest: Partial<IUser>) {
 
 export async function getUserById(userId: string) {
     if (!ObjectId.isValid(userId)) {
-        throw new InvalidIdError(userId)
+        throw new InvalidUserIdError(userId)
     }
     const user = await User.findById(userId).exec();
     if (!user) {
@@ -50,7 +51,7 @@ export async function getAllUsers() {
 
 export async function updateUser(userId: string, updateData: Partial<IUser>) {
     if (!ObjectId.isValid(userId)) {
-        throw new InvalidIdError(userId)
+        throw new InvalidUserIdError(userId)
     }
     const user = await User.findById(userId).exec();
     if (!user) {

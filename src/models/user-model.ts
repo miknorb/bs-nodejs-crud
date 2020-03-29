@@ -15,6 +15,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     }
-}, {autoIndex: true});
+}, {autoIndex: true, versionKey: false});
 
 export const User: Model<UserModel> = model<UserModel>("User", userSchema);

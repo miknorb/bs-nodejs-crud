@@ -5,6 +5,17 @@ import MissingRequestParamError from "../errors/missing-request-param-error";
 
 export const userRouter = Router();
 
+// # Get all users
+userRouter.get("/", async (req, res, next) => {
+    try {
+        const response = await getAllUsers();
+        res.status(200);
+        res.send(response)
+    } catch (err) {
+        next(err);
+    }
+});
+
 // # Create new user
 userRouter.post("/", async (req, res, next) => {
     if (!req.body)
@@ -15,17 +26,6 @@ userRouter.post("/", async (req, res, next) => {
         res.send(response);
     } catch (err) {
         next(err)
-    }
-});
-
-// # Get all users
-userRouter.get("/", async (req, res, next) => {
-    try {
-        const response = await getAllUsers();
-        res.status(200);
-        res.send(response)
-    } catch (err) {
-        next(err);
     }
 });
 
