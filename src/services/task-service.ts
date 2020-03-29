@@ -39,7 +39,8 @@ export async function updateTask(userId: string, taskId: string, updateData: Par
     if (!ObjectId.isValid(taskId)) {
         throw new InvalidTaskIdError(taskId);
     }
-    const task = user.tasks.find(task => task._id === taskId);
+    const task = user.tasks.find(task => task._id == taskId);
+    console.log("loggin found task", task);
     if (!task) {
         throw new TaskNotFoundError({id: taskId});
     }

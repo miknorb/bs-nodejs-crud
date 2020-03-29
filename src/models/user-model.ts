@@ -17,12 +17,7 @@ const taskSchema = new Schema({
     },
     date_time: {
         type: Date,
-        required: true,
-        validate: {
-            validator: (value: Date) => value.getTime() > Date.now(),
-            message: "Task's date_time must be in the future!"
-        },
-
+        required: true
     }
 }, {autoIndex: true, versionKey: false});
 
