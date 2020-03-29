@@ -1,6 +1,5 @@
 import {Document, Types} from "mongoose";
 
-
 export interface IUser {
     username: string;
     first_name: string;

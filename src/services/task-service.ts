@@ -35,13 +35,20 @@ export async function createTask(userId: string, createTaskRequest: ITask) {
 }
 
 export async function updateTask(userId: string, taskId: string, updateData: Partial<ITask>) {
-    const task = await getTaskById(userId, taskId);
+    const user = await getUserById(userId);
+    if (!ObjectId.isValid(taskId)) {
+        throw new InvalidTaskIdError(taskId);
+    }
+    const task = user.tasks.find(task => task._id === taskId);
+    if (!task) {
+        throw new TaskNotFoundError({id: taskId});
+    }
     task.name = updateData.name || task.name;
     task.description = updateData.description || task.description;
     task.date_time = updateData.date_time || task.date_time;
     task.status = updateData.status || task.status;
     try {
-        await task.save();
+        await user.save();
     } catch(err) {
         if (err.name == "ValidationError") {
             throw new ValidationError(err.message);

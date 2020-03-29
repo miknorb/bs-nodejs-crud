@@ -4,8 +4,8 @@
   "description": "BlackSwan NodeJS CRUD test",
   "main": "dist/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "tsc --watch & nodemon app"
+    "start": "node dist/app.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -18,14 +18,18 @@
   },
   "homepage": "https://github.com/miknorb/miknorb#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.9.6"
+    "mongoose": "^5.9.6",
+    "node-cron": "^2.0.3"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.3",
-    "@types/mongoose": "^5.7.8"
+    "@types/mongoose": "^5.7.8",
+    "@types/node-cron": "^2.0.3"
   }
 }
