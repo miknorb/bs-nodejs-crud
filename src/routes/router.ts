@@ -4,4 +4,4 @@ import {taskRouter} from "./task-endpoint";
 
 export const router = Router();
 router.use("/users", userRouter);
-router.use("/users/:id/tasks", taskRouter);
+router.use("/users/:userid/tasks", taskRouter);

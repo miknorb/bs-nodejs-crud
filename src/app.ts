@@ -6,6 +6,8 @@ import "./db";
 import bodyParser from "body-parser";
 import InvalidUserIdError from "./errors/invalid-user-id-error";
 import UserNotFoundError from "./errors/user-not-found-error";
+import InvalidTaskIdError from "./errors/invalid-task-id-error";
+import TaskNotFoundError from "./errors/task-not-found-error";
 
 const app = express();
 const {port} = AppConfiguration.express;
@@ -18,6 +20,9 @@ app.use("/api", router);
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof InvalidUserIdError) {
         err = new UserNotFoundError({id: req.params.userid});
+    }
+    if (err instanceof InvalidTaskIdError) {
+        err = new TaskNotFoundError({id: req.params.taskid})
     }
     err.code = err.code ?? 500;
     console.error(`API Error - code: ${err.code} - message: ${err.message} - stacktrace:`, err.stack ?? "Stacktrace not available");

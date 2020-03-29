@@ -5,6 +5,7 @@ import {IUser} from "../types";
 import UserNotFoundError from "../errors/user-not-found-error";
 import {Types} from "mongoose";
 import InvalidUserIdError from "../errors/invalid-user-id-error";
+
 const {ObjectId} = Types;
 
 export async function createUser(createUserRequest: IUser) {
@@ -30,7 +31,7 @@ export async function createUser(createUserRequest: IUser) {
         }
         throw err;
     }
-    return user.toObject();
+    return user;
 }
 
 export async function getUserById(userId: string) {
@@ -41,29 +42,17 @@ export async function getUserById(userId: string) {
     if (!user) {
         throw new UserNotFoundError({id: userId});
     }
-    return user.toObject();
+    return user;
 }
 
 export async function getAllUsers() {
-    const users = await User.find().exec();
-    return users.map(user => user.toObject());
+    return await User.find().exec();
 }
 
 export async function updateUser(userId: string, updateData: Partial<IUser>) {
-    if (!ObjectId.isValid(userId)) {
-        throw new InvalidUserIdError(userId)
-    }
-    const user = await User.findById(userId).exec();
-    if (!user) {
-        throw new UserNotFoundError({id: userId});
-    }
+    const user = await getUserById(userId);
     user.username = updateData.username ||user.username;
     user.first_name = updateData.first_name || user.first_name;
     user.last_name = updateData.last_name || user.last_name;
-    try {
-        await user.save();
-    } catch (err) {
-        throw err;
-    }
-    return user.toObject();
+    return await user.save();
 }

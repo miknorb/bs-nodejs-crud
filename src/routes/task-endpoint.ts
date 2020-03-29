@@ -23,7 +23,7 @@ taskRouter.post("/", async (req, res, next) => {
     if (!req.body)
         return next(new MissingRequestBodyError());
     try {
-        const response = await createTask(req.params.userod, req.body);
+        const response = await createTask(req.params.userid, req.body);
         res.status(200);
         res.send(response);
     } catch (err) {
@@ -39,7 +39,7 @@ taskRouter.put("/:taskid", async (req, res, next) => {
     if (!req.body)
         return next(new MissingRequestBodyError());
     try {
-        const response = updateTask(req.params.userid, req.params.taskid, req.body);
+        const response = await updateTask(req.params.userid, req.params.taskid, req.body);
         res.status(200);
         res.send(response);
     } catch (err) {
@@ -53,7 +53,7 @@ taskRouter.delete("/:taskid", async (req, res, next) => {
     if (!req.params.taskid)
         return next(new MissingRequestParamError("taskid"));
     try {
-        const response = deleteTask(req.params.userid, req.params.taskid);
+        const response = await deleteTask(req.params.userid, req.params.taskid);
         res.status(200);
         res.send(response);
     } catch (err) {
@@ -67,7 +67,7 @@ taskRouter.get("/:taskid", async (req, res, next) => {
     if (!req.params.taskid)
         return next(new MissingRequestParamError("taskid"));
     try {
-        const response = getTaskById(req.params.userid, req.params.taskid);
+        const response = await getTaskById(req.params.userid, req.params.taskid);
         res.status(200);
         res.send(response);
     } catch (err) {

@@ -18,8 +18,7 @@ paths:
           schema:
             type: array
             items:
-              type: object
-              $ref: '#/definitions/UserResponse'
+              $ref: '#/definitions/UserWithId'
             description: The found user object array in the database
     post:
       summary: Creates a new user
@@ -29,33 +28,33 @@ paths:
           in: body
           required: true
           schema:
-            $ref: "#/definitions/UserRequest"
+            $ref: "#/definitions/User"
       produces:
         - application/json
       responses:
         200:
           description: OK, User has been created
           schema:
-            $ref: "#/definitions/UserResponse"
+            $ref: "#/definitions/UserWithId"
             description: The created user object
         409:
           description: User with that username already exists
         422:
           description: Parameters required to create a new user are missing.
   /users/{userid}:
+    parameters:
+      - name: userid
+        in: path
+        description: ID of the user
+        required: true
+        type: string
     get:
       summary: Get user's info by userId
-      parameters:
-        - name: userid
-          in: path
-          description: ID of the user
-          required: true
-          type: string
       responses:
         200:
           description: OK
           schema:
-            $ref: "#/definitions/UserResponse"
+            $ref: "#/definitions/UserWithId"
             description: The user object with the given ID
         404:
           description: User not found with the given ID
@@ -67,23 +66,102 @@ paths:
           description: Properties to update on the User
           required: true
           schema:
-            $ref: "#/definitions/UserRequest"
-        - name: userid
-          in: path
-          description: ID of the user
-          required: true
-          type: string
+            $ref: "#/definitions/User"
       responses:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/UserResponse'
+            $ref: '#/definitions/UserWithId'
             description: The updated user object
         404:
           description: User not found with the given ID
+  /users/{userid}/tasks:
+    parameters:
+      - name: userid
+        description: ID of the user
+        in: path
+        type: string
+        required: true
+    post:
+      summary: Creates a new task
+      parameters:
+        - name: Task
+          in: body
+          schema:
+            $ref: '#/definitions/Task'
+          required: true
+      responses:
+        200:
+          description: OK - Task created
+          schema:
+            $ref: '#/definitions/TaskWithId'
+            description: The created task object
+        404:
+          description: User not found with the given ID
+        422:
+          description: Required properties are missing or invalid in the body.
+    get:
+      summary: Get all task for the user with the given ID
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TaskWithId'
+              description: The tasks for the user
+  /users/{userid}/tasks/{taskid}:
+    parameters:
+      - name: userid
+        in: path
+        description: ID of the user
+        required: true
+        type: string
+      - name: taskid
+        in: path
+        description: ID of the task
+        required: true
+        type: string
+    get:
+      description: Returns the task of the user
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/TaskWithId'
+        404:
+          description: User or task not found
+    put:
+      description: Updates the task for the user
+      parameters:
+        - name: Task
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/TaskWithId'
+            description: The updated task object
+        404:
+          description: User or task not found
+        422:
+          description: Invalid update values
 
+    delete:
+      summary: Deletes the task from the user
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/TaskWithId'
+            description: The deleted task
+        404:
+          description: Task not found
 definitions:
-  UserRequest:
+  User:
     type: object
     properties:
       username:
@@ -92,14 +170,29 @@ definitions:
         type: string
       last_name:
         type: string
-  UserResponse:
+  UserWithId:
+    allOf:
+      - $ref: '#/definitions/User'
+        type: object
+        properties:
+          _id:
+            type: string
+  Task:
     type: object
     properties:
-      username:
+      name:
         type: string
-      first_name:
+      description:
         type: string
-      last_name:
+      date_time:
         type: string
-      _id:
+        format: 'date-time'
+      status:
         type: string
+  TaskWithId:
+    allOf:
+      - $ref: '#/definitions/Task'
+        type: object
+        properties:
+          _id:
+            type: string

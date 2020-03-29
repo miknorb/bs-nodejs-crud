@@ -3,7 +3,7 @@ import {createUser, getAllUsers, getUserById, updateUser} from "../services/user
 import MissingRequestBodyError from "../errors/missing-request-body-error";
 import MissingRequestParamError from "../errors/missing-request-param-error";
 
-export const userRouter = Router();
+export const userRouter = Router({mergeParams: true});
 
 // # Get all users
 userRouter.get("/", async (req, res, next) => {
